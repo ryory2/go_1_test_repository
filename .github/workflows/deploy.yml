@@ -1,0 +1,53 @@
+name: CI-CD to ECS
+
+on:
+  push:
+    branches: ["main"] # mainブランチへのpushをトリガーに設定する例
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. コードをチェックアウト
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      # 2. AWSへのログイン (公式の ECR ログイン用 GitHub Action)
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      # 3. Dockerイメージをビルド & ECRプッシュに必要なログイン
+      - name: Log in to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v1
+
+      # 4. Dockerイメージビルド
+      - name: Build Docker image
+        run: |
+          docker build -t myapp/go_1_test_repository:latest .
+          # リポジトリURLにタグ付け（例: latest を付ける）
+          # docker tag myapp/go_1_test_repository:latest ${{ secrets.ECR_REPOSITORY }}:latest
+
+      # 5. ECR へ push
+      - name: Push to Amazon ECR
+        run: |
+          docker push ${{ secrets.ECR_REPOSITORY }}:latest
+
+      # 6. ECSサービスのデプロイ
+      - name: Deploy to ECS
+        uses: aws-actions/amazon-ecs-deploy@v1
+        with:
+          # ECSクラスター名
+          cluster: my-ecs-cluster
+          # デプロイ先のサービス名
+          service: myservice
+          # 更新対象のタスク定義内コンテナ名
+          container-name: backend
+          # 新しいDockerイメージ
+          image: ${{ secrets.ECR_REPOSITORY }}:latest
+          # (必要に応じてタスク定義の更新があれば true)
+          force-new-deployment: true
