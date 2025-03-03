@@ -28,26 +28,29 @@ jobs:
       # 4. Dockerイメージビルド
       - name: Build Docker image
         run: |
-          docker build -t myapp/go_1_test_repository:latest .
+          docker build -t test/go_1_test_repository:latest .
           # リポジトリURLにタグ付け（例: latest を付ける）
-          # docker tag myapp/go_1_test_repository:latest ${{ secrets.ECR_REPOSITORY }}:latest
+          # docker tag test/go_1_test_repository:latest ${{ secrets.ECR_REPOSITORY }}:latest
 
       # 5. ECR へ push
       - name: Push to Amazon ECR
         run: |
           docker push ${{ secrets.ECR_REPOSITORY }}:latest
 
-      # 6. ECSサービスのデプロイ
+      # 6. タスク定義をECSへデプロイ (amazon-ecs-deploy-task-definition@v1)
       - name: Deploy to ECS
-        uses: aws-actions/amazon-ecs-deploy@v1
+        id: ecsdeploy
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
+          # ローカルにあるタスク定義テンプレートファイル
+          task-definition: "taskdef.json"
           # ECSクラスター名
-          cluster: my-ecs-cluster
+          cluster: "my-ecs-cluster"
           # デプロイ先のサービス名
-          service: myservice
-          # 更新対象のタスク定義内コンテナ名
-          container-name: backend
-          # 新しいDockerイメージ
-          image: ${{ secrets.ECR_REPOSITORY }}:latest
-          # (必要に応じてタスク定義の更新があれば true)
+          service: "my-ecs-service"
+          # タスク定義内のコンテナ名 ("my-container"と一致させる)
+          container-name: "my-container"
+          # 置き換え先のコンテナイメージ ("<IMAGE_NAME>" をこれに置換)
+          image: "${{ secrets.ECR_REPOSITORY }}:latest"
+          # 強制デプロイしたい場合は true
           force-new-deployment: true
