@@ -23,6 +23,7 @@ jobs:
 
       # 3. ECRプッシュに必要なログイン
       - name: Log in to Amazon ECR
+        id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
       # # 4. Dockerイメージビルド
