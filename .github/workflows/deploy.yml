@@ -58,7 +58,7 @@ jobs:
       - name: Download task definition
         run: |
           set -x
-          aws ecs describe-task-definition --task-definition my-task-definition-family --query taskDefinition > task-definition.json
+          aws ecs describe-task-definition --task-definition my-task-family --query taskDefinition > task-definition.json
           cat task-definition.json  # 内容を確認（※シークレット情報が含まれていないか注意）
 
       # タスク定義を更新
