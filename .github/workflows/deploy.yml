@@ -44,8 +44,11 @@ jobs:
           ECR_REPOSITORY: test/go_1_test_repository
           IMAGE_TAG: ${{ github.sha }}
         run: |
+          set -x  # 以降のコマンドと展開された変数を出力
+          echo "ECR_REGISTRY: $ECR_REGISTRY"
+          echo "ECR_REPOSITORY: $ECR_REPOSITORY"
+          echo "IMAGE_TAG: $IMAGE_TAG"
           docker compose --file docker/docker-compose.prod.yml --env-file docker/env/.env.prod build --no-cache
-          # docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG test/go_1_test_repository:latest
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
@@ -53,7 +56,9 @@ jobs:
       # 既存のタスク定義をDL
       - name: Download task definition
         run: |
+          set -x
           aws ecs describe-task-definition --task-definition my-task-definition-family --query taskDefinition > task-definition.json
+          cat task-definition.json  # 内容を確認（※シークレット情報が含まれていないか注意）
 
       # タスク定義を更新
       - name: Fill in the new image ID in the Amazon ECS task definition
