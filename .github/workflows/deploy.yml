@@ -50,7 +50,7 @@ jobs:
           echo "ECR_REPOSITORY: $ECR_REPOSITORY"
           echo "IMAGE_TAG: $IMAGE_TAG"
           docker compose --file docker/docker-compose.prod.yml --env-file docker/env/.env.prod build --no-cache
-          docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG test/go_1_test_repository:latest
+          docker tag test/go_1_test_repository:latest $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
