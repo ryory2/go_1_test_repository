@@ -41,7 +41,7 @@ jobs:
         id: build-image
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: my-ecr-repo
+          ECR_REPOSITORY: test/go_1_test_repository
           IMAGE_TAG: ${{ github.sha }}
         run: |
           docker compose --file docker/docker-compose.prod.yml --env-file docker/env/.env.prod build --no-cache
