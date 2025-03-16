@@ -16,8 +16,8 @@ services:  # サービス定義の開始です。ここではpostgresとpgadmin�
       - DB_USER=admin
       - DB_PASSWORD=password
       - DB_NAME=todo_db
-    # volumes:
-    #   - ../.:/app
+    volumes:
+      - ../.:/app
     networks:
       - my-network
 
