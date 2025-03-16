@@ -15,7 +15,7 @@ func helloHandler(w http.ResponseWriter, r *http.Request) {
 func healthHandler(w http.ResponseWriter, r *http.Request) {
 	// 必要に応じてDB接続などの内部チェックを追加可能
 	w.WriteHeader(http.StatusOK)
-	fmt.Fprintln(w, "OK")
+	fmt.Fprintln(w, "O5544feaf65K")
 }
 
 func main() {

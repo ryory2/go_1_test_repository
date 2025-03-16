@@ -8,10 +8,9 @@ WORKDIR /app
 COPY ./ .
 
 RUN go mod tidy
-RUN go install github.com/air-verse/air@latest
 
 # ポート8080を公開
 EXPOSE 8080
 
 # アプリケーションの起動
-CMD ["air"]
+CMD ["tail", "-f", "/dev/null"]
