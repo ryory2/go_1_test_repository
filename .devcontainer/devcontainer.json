@@ -1,0 +1,28 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/go
+{
+	"name": "Go",
+	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
+	// "image": "mcr.microsoft.com/devcontainers/go:1-1.23-bookworm",
+	"dockerComposeFile": "../docker/docker-compose.local.yml",
+	"service": "task_go",
+	"workspaceFolder": "/app",
+	"forwardPorts": [
+		8080
+	],
+	// Set default container specific settings.json values on container create.
+	"settings": {
+		"go.useLanguageServer": true,
+		"go.gopath": "/go",
+		"go.goroot": "/usr/local/go",
+		"go.toolsManagement.autoUpdate": true,
+		"go.lintOnSave": "package",
+		"go.vetOnSave": "package",
+		"go.buildOnSave": "off",
+	},
+	// Add the IDs of extensions you want installed when the container is created.
+	"extensions": [
+		"golang.go"
+	],
+	"postCreateCommand": "air"
+}
