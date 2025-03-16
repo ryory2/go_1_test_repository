@@ -31,16 +31,6 @@ COMPOSE_FILE="$DOCKER_DIR/docker-compose.$ENV_NAME.yml"
 # Docker Composeコマンドのオプションを設定
 DOCKER_COMPOSE_OPTS="--file ${COMPOSE_FILE} --env-file ${ENV_FILE}"
 
-echo "スクリプトが実行されました。"
-echo "引数1: $ROOT_DIR"
-echo "引数1: $ENV_NAME"
-echo "引数1: $DOCKER_DIR"
-echo "引数1: $LOG_DIR"
-echo "引数1: $LOG_FILE"
-echo "引数1: $ENV_FILE"
-echo "引数1: $COMPOSE_FILE"
-echo "引数1: $DOCKER_COMPOSE_OPTS"
-
 #############################################
 # ログディレクトリとログファイルの準備
 #############################################
@@ -59,6 +49,16 @@ fi
 #############################################
 # ログ記録の開始
 #############################################
+
+echo "スクリプトが実行されました。" >> "${FULL_LOG_FILE}"
+echo "引数1: $ROOT_DIR" >> "${FULL_LOG_FILE}"
+echo "引数1: $ENV_NAME" >> "${FULL_LOG_FILE}"
+echo "引数1: $DOCKER_DIR" >> "${FULL_LOG_FILE}"
+echo "引数1: $LOG_DIR" >> "${FULL_LOG_FILE}"
+echo "引数1: $LOG_FILE" >> "${FULL_LOG_FILE}"
+echo "引数1: $ENV_FILE" >> "${FULL_LOG_FILE}"
+echo "引数1: $COMPOSE_FILE" >> "${FULL_LOG_FILE}"
+echo "引数1: $DOCKER_COMPOSE_OPTS" >> "${FULL_LOG_FILE}"
 
 # 実行開始時刻をログに記録
 {
@@ -79,6 +79,7 @@ echo "-------------------------docker command start-------------------------" >>
 
 # Docker Composeの設定を確認
 echo "■Running docker compose config..." | tee -a "${FULL_LOG_FILE}"
+echo "docker compose ${DOCKER_COMPOSE_OPTS} config" >> "${FULL_LOG_FILE}"
 docker compose ${DOCKER_COMPOSE_OPTS} config >> "${FULL_LOG_FILE}" 2>&1
 
 # Docker Composeを停止（必要に応じてコメント解除）
@@ -87,10 +88,12 @@ docker compose ${DOCKER_COMPOSE_OPTS} config >> "${FULL_LOG_FILE}" 2>&1
 
 # Docker Composeのビルド
 echo "■Running docker compose build..." | tee -a "${FULL_LOG_FILE}"
+echo "docker compose ${DOCKER_COMPOSE_OPTS} build --no-cache" >> "${FULL_LOG_FILE}"
 docker compose ${DOCKER_COMPOSE_OPTS} build --no-cache >> "${FULL_LOG_FILE}" 2>&1
 
 # Docker Composeの起動
 echo "■Running docker compose up..." | tee -a "${FULL_LOG_FILE}"
+echo "docker compose ${DOCKER_COMPOSE_OPTS} up -d" >> "${FULL_LOG_FILE}"
 docker compose ${DOCKER_COMPOSE_OPTS} up -d >> "${FULL_LOG_FILE}" 2>&1
 
 # Docker完了のログ
