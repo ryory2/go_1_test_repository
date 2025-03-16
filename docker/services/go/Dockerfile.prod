@@ -17,7 +17,7 @@ FROM alpine:latest
 # curl をインストール
 RUN apk update && apk add --no-cache curl
 
-WORKDIR /app
+WORKDIR /app/cmd
 COPY --from=builder /app/cmd/server .
 
 # ポート8080を公開
