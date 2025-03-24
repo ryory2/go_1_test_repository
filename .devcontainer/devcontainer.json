@@ -15,7 +15,7 @@
 	// "forwardPorts": [ // コンテナのポートをローカルマシンに転送します。
 	// 	8080 // Go アプリケーションが listen するポート。 ローカルポート:コンテナポート の形式で指定可能 (例: `8081:8080`)。省略時は同じポート番号。
 	// ],
-	"postCreateCommand": "go install github.com/air-verse/air@latest && cd /app/cmd && air", // コンテナ作成後に実行されるコマンド。 air を使用してホットリロードを実現します。 任意のコマンド、またはスクリプト。
+	"postCreateCommand": "cd /app/cmd && air -c .air.toml", // コンテナ作成後に実行されるコマンド。 air を使用してホットリロードを実現します。 任意のコマンド、またはスクリプト。
 	"customizations": { // VS Code のカスタマイズ設定
 		"vscode": {
 			// コンテナ作成時に settings.json に設定されるデフォルト値。
@@ -27,10 +27,23 @@
 				"go.lintOnSave": "package", // 保存時にパッケージ単位で lint を実行します。 "off", "package", "workspace", "file" から選択。
 				"go.vetOnSave": "package", // 保存時にパッケージ単位で vet を実行します。 "off", "package", "workspace", "file" から選択。
 				"go.buildOnSave": "off", // 保存時にビルドを実行しません。 air で自動ビルドするため。"on", "off", "workspace" から選択。
-			}
-		},
-		"extensions": [ // コンテナにインストールされる VS Code 拡張機能。
-			"golang.go" // Go 拡張機能。 拡張機能のIDを指定。
-		]
-	}
+				// "go.delveConfig": {
+				// 	"dlvArgs": [ // delve の引数。
+				// 		"--listen=:2345", // デバッグポート
+				// 		"--headless=true", // ヘッドレスモード（デバッグコンソールを表示しない）
+				// 		"--api-version=2", // API バージョン
+				// 		"--accept-multiclient" // 複数クライアント接続を許可
+				// 	],
+				// 	"console": "integratedTerminal", // ターミナルでデバッグコンソールを表示
+				// }
+			},
+			"extensions": [ // コンテナにインストールされる VS Code 拡張機能。
+				"golang.go" // Go 拡張機能。 拡張機能のIDを指定。
+			]
+		}
+	},
+	"forwardPorts": [
+		2345, // デバッグポート
+		8080
+	]
 }

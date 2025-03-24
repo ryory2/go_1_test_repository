@@ -8,9 +8,13 @@ WORKDIR /app
 COPY ./ .
 
 RUN go mod tidy
+RUN go install -v github.com/air-verse/air@latest
+RUN go install -v github.com/go-delve/delve/cmd/dlv@latest
 
 # ポート8080を公開
-EXPOSE 8080
+EXPOSE 8080 2345
+
+WORKDIR /app/cmd
 
 # アプリケーションの起動
 CMD ["tail", "-f", "/dev/null"]
