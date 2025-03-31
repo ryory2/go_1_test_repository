@@ -21,7 +21,7 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
-          role-to-assume: arn:aws:iam::990606419933:role/ecs_task_deploy_role
+          role-to-assume: arn:aws:iam::990606419933:role/github_actions_role
           aws-region: ${{ secrets.AWS_REGION }}
 
       # 3. ECRプッシュに必要なログイン

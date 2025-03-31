@@ -10,7 +10,7 @@ import (
 
 // "/" にアクセスされた場合のハンドラー
 func helloHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintln(w, "Hello, ECS on port 8080!(updated14")
+	fmt.Fprintln(w, "Hello, ECS on port 8080!(updated15")
 }
 
 // "/health" にアクセスされた場合のヘルスチェックハンドラー
